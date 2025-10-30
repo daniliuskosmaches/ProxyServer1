@@ -5,8 +5,5 @@ server:
     cloud:
       gateway:
         routes:
-          - id: Proxy
-            uri: https://emailsender-wzz9.onrender.com/
-            predicates:
-              - Path=/api/a/**
+          - { id: Proxy, uri: ${BACKEND_URL}, predicates: [ Path=/api/a/** ] }
 
