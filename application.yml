@@ -1,0 +1,12 @@
+server:
+  port: 8080
+
+  spring:
+    cloud:
+      gateway:
+        routes:
+          - id: Proxy
+            uri: https://emailsender-wzz9.onrender.com/
+            predicates:
+              - Path=/api/a/**
+
