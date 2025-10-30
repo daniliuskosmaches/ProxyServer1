@@ -1,9 +1,12 @@
-server:
-  port: 8080
 
-  spring:
-    cloud:
-      gateway:
-        routes:
-          - { id: Proxy, uri: ${BACKEND_URL}, predicates: [ Path=/api/a/** ] }
 
+# Примерно так должен выглядеть ваш код в application.yml:
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: Proxy # Строка, примерно соответствующая вашей ошибке
+          uri: ${BACKEND_URL}
+          predicates:
+            - Path=/api/**
+          # Добавьте другие поля, если они есть (filters, etc.)
