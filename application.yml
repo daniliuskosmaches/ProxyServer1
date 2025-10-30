@@ -8,5 +8,5 @@ spring:
         - id: Proxy # Строка, примерно соответствующая вашей ошибке
           uri: ${BACKEND_URL}
           predicates:
-            - Path=/api/**
+            - Path=/api/send-message
           # Добавьте другие поля, если они есть (filters, etc.)
