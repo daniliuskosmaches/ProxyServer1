@@ -1,14 +1,15 @@
 # ====================================================================
 # СТАДИЯ 1: Сборка (BUILDER STAGE)
-# Используем чистый JDK 25 и устанавливаем Maven вручную
 # ====================================================================
 FROM eclipse-temurin:25-jdk-alpine AS builder
 
-# Установим Maven (потребуются wget и unzip)
+# Установим Maven (потребуются wget, unzip и bash)
 RUN apk add --no-cache wget unzip bash
-ARG MAVEN_VERSION=3.9.5
+# --- ИЗМЕНЯЕМ ЭТИ ДВЕ СТРОКИ ---
+ARG MAVEN_VERSION=3.9.4
+ARG BASE_URL=https://archive.apache.org/dist/maven/maven-3/${MAVEN_VERSION}/binaries/apache-maven-${MAVEN_VERSION}-bin.zip
+# -------------------------------
 ARG MAVEN_HOME=/usr/share/maven
-ARG BASE_URL=https://apache.osuosl.org/maven/maven-3/${MAVEN_VERSION}/binaries/apache-maven-${MAVEN_VERSION}-bin.zip
 
 # Скачиваем, разархивируем и настраиваем Maven
 RUN wget -q ${BASE_URL} -O /tmp/maven.zip \
@@ -24,17 +25,14 @@ ENV PATH $PATH:$MAVEN_HOME/bin
 # Устанавливаем рабочую директорию в контейнере
 WORKDIR /app
 
-# Копируем pom.xml и скачиваем зависимости
+# ... (Остальная часть Dockerfile без изменений)
 COPY pom.xml .
 RUN mvn dependency:go-offline -B
-
-# Копируем весь исходный код и собираем приложение
 COPY src ./src
 RUN mvn package -DskipTests
 
 # ====================================================================
 # СТАДИЯ 2: Запуск (RUNNER STAGE)
-# Используем минимальный JRE 25
 # ====================================================================
 FROM eclipse-temurin:25-jre-alpine
 
